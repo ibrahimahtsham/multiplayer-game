@@ -74,7 +74,6 @@ function handleShoot(playerId) {
 
   const newBullet = { x: player.x, y: bulletSpawnY, speed: BULLET_SPEED };
   gameState.bullets.push(newBullet);
-  console.log("Bullet added. Total bullets:", gameState.bullets.length); // Debugging line
 
   handleBulletCollision(newBullet);
 
@@ -108,10 +107,6 @@ function handleBulletCollision(newBullet) {
     const bulletIndex = gameState.bullets.indexOf(newBullet);
     if (bulletIndex > -1) {
       gameState.bullets.splice(bulletIndex, 1);
-      console.log(
-        "Bullet collided and removed. Total bullets:",
-        gameState.bullets.length
-      ); // Debugging line
     }
   }
 }
@@ -140,7 +135,6 @@ function moveBullets() {
     const index = gameState.bullets.indexOf(bullet);
     if (index > -1) {
       gameState.bullets.splice(index, 1);
-      console.log("Bullet removed. Total bullets:", gameState.bullets.length); // Debugging line
     }
   });
 }

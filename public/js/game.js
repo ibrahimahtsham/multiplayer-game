@@ -32,8 +32,6 @@ function renderPlayers() {
 }
 
 function renderBullets() {
-  console.log("Rendering bullets:", gameState.bullets.length); // Debugging line
-
   ctx.fillStyle = "white";
   const bulletWidth = canvas.width * 0.01;
   const bulletHeight = canvas.height * 0.02;

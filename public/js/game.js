@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect("https://best-game-in-the-world.onrender.com");
 
 // http://localhost:3000
 

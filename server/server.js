@@ -57,9 +57,9 @@ function handleConnection(socket) {
 function handleMove(direction, playerId) {
   const player = gameState.players[playerId];
   const moveDistance = 0.01; // 1% of canvas width
-  if (direction === "left" && player.x > 0) {
+  if (direction === "left" && player.x > 0.025) {
     player.x -= moveDistance;
-  } else if (direction === "right" && player.x < 1) {
+  } else if (direction === "right" && player.x < 0.975) {
     player.x += moveDistance;
   }
   emitGameState();

@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://d358-101-50-71-2.ngrok-free.app");
+const socket = io.connect("https://845d-101-50-71-2.ngrok-free.app");
 
 let gameState = {};
 
@@ -66,33 +66,66 @@ function renderGame() {
   renderBullets();
 }
 
-document.getElementById("leftButton").addEventListener("click", () => {
-  socket.emit("move", "left");
+let intervalId;
+const intervalValue = 1;
+
+document.getElementById("leftButton").addEventListener("mousedown", () => {
+  intervalId = setInterval(() => {
+    socket.emit("move", "left");
+  }, intervalValue); // Emit move event every 100ms
 });
 
-document.getElementById("rightButton").addEventListener("click", () => {
-  socket.emit("move", "right");
+document.getElementById("leftButton").addEventListener("mouseup", () => {
+  clearInterval(intervalId);
 });
 
-document.getElementById("shootButton").addEventListener("click", () => {
-  socket.emit("shoot");
+document.getElementById("rightButton").addEventListener("mousedown", () => {
+  intervalId = setInterval(() => {
+    socket.emit("move", "right");
+  }, intervalValue); // Emit move event every 100ms
 });
+
+document.getElementById("rightButton").addEventListener("mouseup", () => {
+  clearInterval(intervalId);
+});
+
+document.getElementById("shootButton").addEventListener("mousedown", () => {
+  intervalId = setInterval(() => {
+    socket.emit("shoot");
+  }, intervalValue); // Emit shoot event every 100ms
+});
+
+document.getElementById("shootButton").addEventListener("mouseup", () => {
+  clearInterval(intervalId);
+});
+
+let keys = {};
 
 function handleKeyDown(event) {
-  switch (event.keyCode) {
-    case 37:
-      socket.emit("move", "left");
-      break;
-    case 39:
-      socket.emit("move", "right");
-      break;
-    case 32:
-      socket.emit("shoot");
-      break;
+  keys[event.keyCode] = true;
+
+  if (keys[37] || keys[65]) {
+    // Left arrow key or 'a'
+    socket.emit("move", "left");
+  }
+
+  if (keys[39] || keys[68]) {
+    // Right arrow key or 'd'
+    socket.emit("move", "right");
+  }
+
+  if (keys[32]) {
+    // Space bar
+    socket.emit("shoot");
   }
 }
 
+function handleKeyUp(event) {
+  keys[event.keyCode] = false;
+}
+
 document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
 
 window.onload = function () {
   var canvas = document.getElementById("gameCanvas");

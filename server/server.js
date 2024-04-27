@@ -22,6 +22,7 @@ const initialGameState = {
   players: {},
   bullets: [],
   aliens: [],
+  gameOver: false, // Add this line
 };
 
 // Current game state
@@ -133,14 +134,23 @@ function moveAliens() {
       const player = gameState.players[playerId];
       const isCollidingX =
         player.x < alien.x + 0.05 && player.x + 0.05 > alien.x;
-      const isCollidingY =
-        player.y < alien.y + 0.05 && player.y + 0.05 > alien.y;
+      const isCollidingY = player.y < alien.y + 0.1 && player.y + 0.1 > alien.y;
       if (isCollidingX && isCollidingY) {
-        alien.speed = 0; // Stop the alien
+        gameState.gameOver = true; // Set the game over flag
         io.emit("alienCollision", "get rekt baka!!! >:3"); // Emit custom event with message
         setTimeout(() => {
           io.emit("alienCollision", "");
-          io.emit("reloadPage"); // Emit event to reload the page
+          resetGameState(); // Reset the game state
+          gameState.gameOver = false; // Reset the game over flag
+          gameState.aliens = []; // Clear aliens
+          // Reset players positions and retain color
+          for (let playerId in gameState.players) {
+            gameState.players[playerId] = {
+              x: 0.5,
+              y: 0.95,
+              color: gameState.players[playerId].color,
+            };
+          }
         }, 3000); // After 3 seconds
         return;
       }
@@ -175,11 +185,12 @@ function moveBullets() {
 // Main game loop
 setInterval(() => {
   if (!gameState.gameOver) {
+    // Add this line
     moveBullets();
     moveAliens();
     generateAliens();
-    emitGameState();
   }
+  emitGameState();
 }, 1000 / 30);
 
 // Emit game state to all clients

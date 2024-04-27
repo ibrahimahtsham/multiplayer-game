@@ -1,6 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://569b-101-50-71-2.ngrok-free.app");
+const socket = io.connect("http://localhost:3000");
+
+// http://localhost:3000
 
 let gameState = {};
 const PLAYER_SIZE = 0.05;
@@ -177,10 +179,6 @@ document
 
 socket.on("alienCollision", (message) => {
   document.getElementById("gameOverMessage").innerHTML = message;
-});
-
-socket.on("reloadPage", function () {
-  location.reload();
 });
 
 window.onload = function () {

@@ -5,6 +5,7 @@ const path = require("path");
 
 // Constants for customization
 const BULLET_SPEED = 0.025;
+const PLAYER_SPEED = 0.0125;
 
 const app = express();
 const server = http.createServer(app);
@@ -18,11 +19,7 @@ const io = socketIO(server, {
 let gameState = {
   players: {},
   bullets: [],
-  aliens: [
-    { x: 0.2, y: 0.1 },
-    { x: 0.4, y: 0.1 },
-    { x: 0.6, y: 0.1 },
-  ],
+  aliens: [],
 };
 
 io.on("connection", handleConnection);
@@ -32,7 +29,7 @@ function handleConnection(socket) {
   const playerId = socket.id;
   const initialColor =
     Object.keys(gameState.players).length === 0 ? "blue" : "red";
-  gameState.players[playerId] = { x: 0.4, y: 0.8, color: initialColor };
+  gameState.players[playerId] = { x: 0.5, y: 0.95, color: initialColor };
 
   emitGameState();
 
@@ -56,10 +53,10 @@ function handleConnection(socket) {
 // Move player based on direction
 function handleMove(direction, playerId) {
   const player = gameState.players[playerId];
-  const moveDistance = 0.01; // 1% of canvas width
+  const moveDistance = PLAYER_SPEED;
   if (direction === "left" && player.x > 0.025) {
     player.x -= moveDistance;
-  } else if (direction === "right" && player.x < 0.975) {
+  } else if (direction === "right" && player.x < 1.0 - 0.03) {
     player.x += moveDistance;
   }
   emitGameState();

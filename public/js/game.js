@@ -1,8 +1,11 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://845d-101-50-71-2.ngrok-free.app");
+const socket = io.connect("https://569b-101-50-71-2.ngrok-free.app");
 
 let gameState = {};
+const PLAYER_SIZE = 0.05;
+const CANVAS_WIDTH = canvas.width;
+const CANVAS_HEIGHT = canvas.height;
 
 socket.on("connect", () => {
   console.log("Connected to server");
@@ -21,7 +24,7 @@ function renderPlayers() {
   for (let playerId in gameState.players) {
     const player = gameState.players[playerId];
     ctx.fillStyle = player.color;
-    const playerSize = canvas.width * 0.05; // 5% of canvas width
+    const playerSize = canvas.width * PLAYER_SIZE; // 5% of canvas width
     ctx.fillRect(
       player.x * canvas.width - playerSize / 2,
       player.y * canvas.height - playerSize / 2,
@@ -67,37 +70,65 @@ function renderGame() {
 }
 
 let intervalId;
-const intervalValue = 1;
+const INTERVAL_VALUE = 35;
+let buttonPressed = null; // Add this line
 
-document.getElementById("leftButton").addEventListener("mousedown", () => {
-  intervalId = setInterval(() => {
-    socket.emit("move", "left");
-  }, intervalValue); // Emit move event every 100ms
-});
+function startMovingLeft() {
+  if (!buttonPressed) {
+    // Add this line
+    buttonPressed = "left"; // Add this line
+    intervalId = setInterval(() => {
+      socket.emit("move", "left");
+    }, INTERVAL_VALUE);
+  }
+}
 
-document.getElementById("leftButton").addEventListener("mouseup", () => {
+function startMovingRight() {
+  if (!buttonPressed) {
+    // Add this line
+    buttonPressed = "right"; // Add this line
+    intervalId = setInterval(() => {
+      socket.emit("move", "right");
+    }, INTERVAL_VALUE);
+  }
+}
+
+function stopMoving() {
   clearInterval(intervalId);
-});
+  buttonPressed = null; // Add this line
+}
 
-document.getElementById("rightButton").addEventListener("mousedown", () => {
-  intervalId = setInterval(() => {
-    socket.emit("move", "right");
-  }, intervalValue); // Emit move event every 100ms
-});
+document
+  .getElementById("leftButton")
+  .addEventListener("touchstart", startMovingLeft);
+document.getElementById("leftButton").addEventListener("touchend", stopMoving);
 
-document.getElementById("rightButton").addEventListener("mouseup", () => {
+document
+  .getElementById("rightButton")
+  .addEventListener("touchstart", startMovingRight);
+document.getElementById("rightButton").addEventListener("touchend", stopMoving);
+
+function startShooting() {
+  if (!buttonPressed) {
+    // Add this line
+    buttonPressed = "shoot"; // Add this line
+    intervalId = setInterval(() => {
+      socket.emit("shoot");
+    }, INTERVAL_VALUE);
+  }
+}
+
+function stopShooting() {
   clearInterval(intervalId);
-});
+  buttonPressed = null; // Add this line
+}
 
-document.getElementById("shootButton").addEventListener("mousedown", () => {
-  intervalId = setInterval(() => {
-    socket.emit("shoot");
-  }, intervalValue); // Emit shoot event every 100ms
-});
-
-document.getElementById("shootButton").addEventListener("mouseup", () => {
-  clearInterval(intervalId);
-});
+document
+  .getElementById("shootButton")
+  .addEventListener("touchstart", startShooting);
+document
+  .getElementById("shootButton")
+  .addEventListener("touchend", stopShooting);
 
 let keys = {};
 
@@ -127,14 +158,31 @@ function handleKeyUp(event) {
 document.addEventListener("keydown", handleKeyDown);
 document.addEventListener("keyup", handleKeyUp);
 
+//toggle full screen
+document
+  .getElementById("fullscreenButton")
+  .addEventListener("click", function () {
+    var fullscreenButton = document.getElementById("fullscreenButton");
+
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(console.log);
+      fullscreenButton.style.top = "0px";
+      fullscreenButton.style.right = "0px";
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen().catch(console.log);
+      fullscreenButton.style.top = "10px";
+      fullscreenButton.style.right = "10px";
+    }
+  });
+
 window.onload = function () {
   var canvas = document.getElementById("gameCanvas");
-  canvas.width = window.innerWidth * 0.8;
-  canvas.height = window.innerHeight * 0.5;
+  canvas.width = window.innerWidth * 0.95;
+  canvas.height = window.innerHeight * 0.65;
 
   window.addEventListener("resize", function () {
-    canvas.width = window.innerWidth * 0.8;
-    canvas.height = window.innerHeight * 0.5;
+    canvas.width = window.innerWidth * 0.95;
+    canvas.height = window.innerHeight * 0.65;
     renderGame();
   });
 };

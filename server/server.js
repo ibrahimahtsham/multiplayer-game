@@ -6,6 +6,7 @@ const path = require("path");
 // Constants for customization
 const BULLET_SPEED = 0.025;
 const PLAYER_SPEED = 0.0125;
+const ALIEN_SPEED = 0.005;
 
 const app = express();
 const server = http.createServer(app);
@@ -16,11 +17,20 @@ const io = socketIO(server, {
   },
 });
 
-let gameState = {
+// Initial game state
+const initialGameState = {
   players: {},
   bullets: [],
   aliens: [],
 };
+
+// Current game state
+let gameState = { ...initialGameState };
+
+// Reset game state
+function resetGameState() {
+  gameState = { ...initialGameState };
+}
 
 io.on("connection", handleConnection);
 
@@ -36,6 +46,7 @@ function handleConnection(socket) {
   // Handle client disconnection
   socket.on("disconnect", () => {
     delete gameState.players[playerId];
+    resetGameState(); // Reset the game state when a player disconnects
     emitGameState();
   });
 
@@ -83,15 +94,10 @@ function handleBulletCollision(newBullet) {
 
   for (let i = 0; i < gameState.aliens.length; i++) {
     const alien = gameState.aliens[i];
-    const bottomBulletY = newBullet.y;
-    const topAlienY = alien.y;
-    const topBulletY = newBullet.y;
-    const bottomAlienY = alien.y + 0.05;
-
     const isCollidingX =
-      newBullet.x >= alien.x && newBullet.x <= alien.x + 0.05;
+      newBullet.x + 0.025 >= alien.x && newBullet.x <= alien.x + 0.025;
     const isCollidingY =
-      bottomBulletY >= topAlienY && topBulletY <= bottomAlienY;
+      newBullet.y + 0.025 >= alien.y && newBullet.y <= alien.y + 0.025;
 
     if (isCollidingX && isCollidingY) {
       gameState.aliens.splice(i, 1);
@@ -108,11 +114,39 @@ function handleBulletCollision(newBullet) {
   }
 }
 
-// Main game loop
-setInterval(() => {
-  moveBullets();
-  emitGameState();
-}, 1000 / 30);
+// Generate aliens
+function generateAliens() {
+  if (Math.random() < 0.02) {
+    // 2% chance to spawn an alien each frame
+    const newAlien = { x: Math.random(), y: 0, speed: ALIEN_SPEED };
+    gameState.aliens.push(newAlien);
+  }
+}
+
+// Move aliens
+function moveAliens() {
+  for (let alien of gameState.aliens) {
+    alien.y += alien.speed;
+
+    // Check for collision with players
+    for (let playerId in gameState.players) {
+      const player = gameState.players[playerId];
+      const isCollidingX =
+        player.x < alien.x + 0.05 && player.x + 0.05 > alien.x;
+      const isCollidingY =
+        player.y < alien.y + 0.05 && player.y + 0.05 > alien.y;
+      if (isCollidingX && isCollidingY) {
+        alien.speed = 0; // Stop the alien
+        io.emit("alienCollision", "get rekt baka!!! >:3"); // Emit custom event with message
+        setTimeout(() => {
+          io.emit("alienCollision", "");
+          io.emit("reloadPage"); // Emit event to reload the page
+        }, 3000); // After 3 seconds
+        return;
+      }
+    }
+  }
+}
 
 // Move bullets and emit updated game state
 function moveBullets() {
@@ -120,6 +154,8 @@ function moveBullets() {
 
   for (let bullet of gameState.bullets) {
     bullet.y -= bullet.speed;
+
+    handleBulletCollision(bullet); // Add this line
 
     if (bullet.y < 0 || bullet.y > 1) {
       // Add bullets to remove list
@@ -135,6 +171,16 @@ function moveBullets() {
     }
   });
 }
+
+// Main game loop
+setInterval(() => {
+  if (!gameState.gameOver) {
+    moveBullets();
+    moveAliens();
+    generateAliens();
+    emitGameState();
+  }
+}, 1000 / 30);
 
 // Emit game state to all clients
 function emitGameState() {

@@ -175,6 +175,14 @@ document
     }
   });
 
+socket.on("alienCollision", (message) => {
+  document.getElementById("gameOverMessage").innerHTML = message;
+});
+
+socket.on("reloadPage", function () {
+  location.reload();
+});
+
 window.onload = function () {
   var canvas = document.getElementById("gameCanvas");
   canvas.width = window.innerWidth * 0.95;

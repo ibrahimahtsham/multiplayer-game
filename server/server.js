@@ -173,9 +173,12 @@ function moveAliens() {
       const player = gameState.players[playerId];
       const isCollidingX =
         player.x < alien.x + 0.05 && player.x + 0.05 > alien.x;
-      const isCollidingY =
-        player.y < alien.y + 0.05 && player.y + 0.05 > alien.y;
+      const isCollidingY = player.y < alien.y && player.y + 0.05 > alien.y;
       if (isCollidingX && isCollidingY) {
+        console.log("player x:", player.x);
+        console.log("player y:", player.y);
+        console.log("alien x:", alien.x);
+        console.log("alien y:", alien.y);
         gameState.gameOver = true; // Set the game over flag
         io.emit("alienCollision", "get rekt baka!!! >:3"); // Emit custom event with message
         setTimeout(() => {

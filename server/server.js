@@ -183,13 +183,14 @@ function moveAliens() {
           resetGameState(); // Reset the game state
           gameState.gameOver = false; // Reset the game over flag
           gameState.aliens = []; // Clear aliens
-          // Reset players positions and retain color and username
+          // Reset players positions and retain color and username and reset the score to 0
           for (let playerId in gameState.players) {
             gameState.players[playerId] = {
               x: 0.5,
               y: 0.95,
               color: gameState.players[playerId].color,
               username: gameState.players[playerId].username,
+              score: 0,
             };
           }
         }, 3000); // After 3 seconds

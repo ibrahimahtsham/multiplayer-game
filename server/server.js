@@ -6,7 +6,7 @@ const path = require("path");
 // Constants for customization
 const BULLET_SPEED = 0.025;
 const PLAYER_SPEED = 0.0125;
-const ALIEN_SPEED = 0.005;
+const ALIEN_SPEED = 0.0025;
 
 const app = express();
 const server = http.createServer(app);

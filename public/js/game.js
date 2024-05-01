@@ -100,7 +100,7 @@ function updateScoreDisplay() {
 }
 
 let intervalId;
-const INTERVAL_VALUE = 35;
+const INTERVAL_VALUE = 70;
 let buttonPressed = null; // Add this line
 
 function startMovingLeft() {

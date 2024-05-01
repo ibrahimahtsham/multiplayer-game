@@ -85,10 +85,13 @@ function renderGame() {
 }
 
 function updateScoreDisplay() {
-  const playerId = socket.id;
-  const player = gameState.players[playerId];
   const scoreDisplay = document.getElementById("scoreDisplay");
-  scoreDisplay.innerHTML = `Score: ${player.score}`;
+  let scoreHTML = "Scores:<br>";
+  for (let playerId in gameState.players) {
+    const player = gameState.players[playerId];
+    scoreHTML += `${player.username}: ${player.score}<br>`;
+  }
+  scoreDisplay.innerHTML = scoreHTML;
 }
 
 let intervalId;

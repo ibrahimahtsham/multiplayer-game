@@ -137,7 +137,7 @@ function handleBulletCollision(newBullet) {
       for (let playerId in gameState.players) {
         const player = gameState.players[playerId];
         if (playerId === newBullet.playerId) {
-          player.score += 10; // Increment score by 10
+          player.score += 1; // Increment score by 1
           break;
         }
       }

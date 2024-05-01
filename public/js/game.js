@@ -81,6 +81,14 @@ function renderGame() {
   renderAliens();
   renderPlayers();
   renderBullets();
+  updateScoreDisplay(); // Add this line
+}
+
+function updateScoreDisplay() {
+  const playerId = socket.id;
+  const player = gameState.players[playerId];
+  const scoreDisplay = document.getElementById("scoreDisplay");
+  scoreDisplay.innerHTML = `Score: ${player.score}`;
 }
 
 let intervalId;

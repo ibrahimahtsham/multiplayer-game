@@ -55,6 +55,7 @@ io.on("connection", handleConnection);
 function handleConnection(socket) {
   const playerId = socket.id;
 
+  // Update player object structure to include score
   socket.on("newPlayer", (username) => {
     const initialColor = getRandomColor();
     gameState.players[playerId] = {
@@ -62,7 +63,8 @@ function handleConnection(socket) {
       y: 0.95,
       color: initialColor,
       username: username,
-    }; // Store username
+      score: 0, // Initialize score
+    };
     emitGameState();
   });
 
@@ -103,7 +105,12 @@ function handleShoot(playerId) {
   // Adjust the y-coordinate of the bullet's spawn position
   const bulletSpawnY = player.y - 0.05; // 5% of canvas height above the player
 
-  const newBullet = { x: player.x, y: bulletSpawnY, speed: BULLET_SPEED };
+  const newBullet = {
+    x: player.x,
+    y: bulletSpawnY,
+    speed: BULLET_SPEED,
+    playerId: playerId,
+  }; // Attach playerId
   gameState.bullets.push(newBullet);
 
   handleBulletCollision(newBullet);
@@ -125,6 +132,16 @@ function handleBulletCollision(newBullet) {
     if (isCollidingX && isCollidingY) {
       gameState.aliens.splice(i, 1);
       bulletRemoved = true;
+
+      // Find the player who shot the bullet and update their score
+      for (let playerId in gameState.players) {
+        const player = gameState.players[playerId];
+        if (playerId === newBullet.playerId) {
+          player.score += 10; // Increment score by 10
+          break;
+        }
+      }
+
       break;
     }
   }

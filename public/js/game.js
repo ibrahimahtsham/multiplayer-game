@@ -1,8 +1,9 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://best-game-in-the-world.onrender.com");
+const socket = io.connect("https://5d6a-101-50-71-2.ngrok-free.app");
 
 // http://localhost:3000
+// https://best-game-in-the-world.onrender.com
 
 let gameState = {};
 const PLAYER_SIZE = 0.05;
@@ -11,6 +12,8 @@ const CANVAS_HEIGHT = canvas.height;
 
 socket.on("connect", () => {
   console.log("Connected to server");
+  const username = prompt("Please enter your username:");
+  socket.emit("newPlayer", username);
 });
 
 socket.on("update", (receivedGameState) => {
@@ -32,6 +35,15 @@ function renderPlayers() {
       player.y * canvas.height - playerSize / 2,
       playerSize,
       playerSize
+    );
+
+    // Display username above the player
+    ctx.fillStyle = "white";
+    ctx.font = "12px Arial";
+    ctx.fillText(
+      player.username,
+      player.x * canvas.width - playerSize / 2,
+      player.y * canvas.height - playerSize / 2 - 15
     );
   }
 }

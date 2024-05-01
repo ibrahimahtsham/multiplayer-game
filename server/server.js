@@ -25,6 +25,22 @@ const initialGameState = {
   gameOver: false, // Add this line
 };
 
+function getRandomColor() {
+  const neonColors = [
+    "#39FF14",
+    "#FF073A",
+    "#FFD300",
+    "#00FFFF",
+    "#FF00FF",
+    "#1B03A3",
+    "#FE59C2",
+    "#BDFCC9",
+    "#6E0DD0",
+    "#D0FA1B",
+  ];
+  return neonColors[Math.floor(Math.random() * neonColors.length)];
+}
+
 // Current game state
 let gameState = { ...initialGameState };
 
@@ -38,11 +54,17 @@ io.on("connection", handleConnection);
 // Handles new client connections
 function handleConnection(socket) {
   const playerId = socket.id;
-  const initialColor =
-    Object.keys(gameState.players).length === 0 ? "blue" : "red";
-  gameState.players[playerId] = { x: 0.5, y: 0.95, color: initialColor };
 
-  emitGameState();
+  socket.on("newPlayer", (username) => {
+    const initialColor = getRandomColor();
+    gameState.players[playerId] = {
+      x: 0.5,
+      y: 0.95,
+      color: initialColor,
+      username: username,
+    }; // Store username
+    emitGameState();
+  });
 
   // Handle client disconnection
   socket.on("disconnect", () => {
@@ -134,7 +156,8 @@ function moveAliens() {
       const player = gameState.players[playerId];
       const isCollidingX =
         player.x < alien.x + 0.05 && player.x + 0.05 > alien.x;
-      const isCollidingY = player.y < alien.y + 0.1 && player.y + 0.1 > alien.y;
+      const isCollidingY =
+        player.y < alien.y + 0.05 && player.y + 0.05 > alien.y;
       if (isCollidingX && isCollidingY) {
         gameState.gameOver = true; // Set the game over flag
         io.emit("alienCollision", "get rekt baka!!! >:3"); // Emit custom event with message
@@ -143,12 +166,13 @@ function moveAliens() {
           resetGameState(); // Reset the game state
           gameState.gameOver = false; // Reset the game over flag
           gameState.aliens = []; // Clear aliens
-          // Reset players positions and retain color
+          // Reset players positions and retain color and username
           for (let playerId in gameState.players) {
             gameState.players[playerId] = {
               x: 0.5,
               y: 0.95,
               color: gameState.players[playerId].color,
+              username: gameState.players[playerId].username,
             };
           }
         }, 3000); // After 3 seconds

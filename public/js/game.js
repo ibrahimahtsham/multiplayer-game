@@ -92,6 +92,11 @@ function updateScoreDisplay() {
     scoreHTML += `${player.username}: ${player.score}<br>`;
   }
   scoreDisplay.innerHTML = scoreHTML;
+
+  // Position score display in the middle left
+  const canvasWidth = canvas.width;
+  scoreDisplay.style.top = `${canvas.height / 2}px`;
+  scoreDisplay.style.left = `${canvasWidth * 0.05}px`; // Adjust the percentage as needed
 }
 
 let intervalId;

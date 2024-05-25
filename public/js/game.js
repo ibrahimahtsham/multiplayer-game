@@ -5,14 +5,14 @@ const socket = io.connect("http://localhost:3000");
 // Load the alien image
 const alienImage = new Image();
 const playerImage = new Image();
-playerImage.src = './images/spaceship.png';
-alienImage.src = './images/alon.png'; // Provide the correct path to your image
+playerImage.src = "./images/spaceship.png";
+alienImage.src = "./images/alon.png"; // Provide the correct path to your image
 
-alienImage.onload = function() {
+alienImage.onload = function () {
   renderGame(); // Call renderGame after the image has loaded
 };
 
-playerImage.onload = function() {
+playerImage.onload = function () {
   renderGame(); // Call renderGame after the image has loaded
 };
 
@@ -39,7 +39,10 @@ function clearCanvas() {
 function renderPlayers() {
   for (let playerId in gameState.players) {
     const player = gameState.players[playerId];
+
+    //set player color
     ctx.fillStyle = player.color;
+
     const playerSize = canvas.width * PLAYER_SIZE; // 5% of canvas width
     const x = player.x * canvas.width - playerSize / 2;
     const y = player.y * canvas.height - playerSize / 2;
@@ -75,12 +78,12 @@ function renderAliens() {
   if (!alienImage.complete) {
     return; // Wait until the image is fully loaded
   }
-  
+
   for (let alien of gameState.aliens) {
     const alienSize = canvas.width * 0.05; // 5% of canvas width
     const x = alien.x * canvas.width - alienSize / 2;
     const y = alien.y * canvas.height - alienSize / 2;
-    
+
     // Draw the image
     ctx.drawImage(alienImage, x, y, alienSize, alienSize);
   }

@@ -1,6 +1,6 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://5d6a-101-50-71-2.ngrok-free.app");
+const socket = io.connect("https://best-game-in-the-world.onrender.com");
 
 // http://localhost:3000
 // https://best-game-in-the-world.onrender.com

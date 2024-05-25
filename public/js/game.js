@@ -1,21 +1,39 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://best-game-in-the-world.onrender.com");
+const socket = io.connect("http://localhost:3000");
 
 // https://best-game-in-the-world.onrender.com
 // http://localhost:3000
 
 // Load the alien image
 const alienImage = new Image();
-const playerImage = new Image();
-playerImage.src = "./images/spaceship.png";
+const playerImage1 = new Image();
+const playerImage2 = new Image();
+const playerImage3 = new Image();
+const playerImage4 = new Image();
+const playerImage5 = new Image();
+const playerImage6 = new Image();
+const playerImage7 = new Image();
+const playerImage8 = new Image();
+const playerImage9 = new Image();
+const playerImage10 = new Image();
+playerImage1.src = "./images/spaceship.png";
+playerImage2.src = "./images/spaceship2.png";
+playerImage3.src = "./images/spaceship3.png";
+playerImage4.src = "./images/spaceship4.png";
+playerImage5.src = "./images/spaceship5.png";
+playerImage6.src = "./images/spaceship6.png";
+playerImage7.src = "./images/spaceship7.png";
+playerImage8.src = "./images/spaceship8.png";
+playerImage9.src = "./images/spaceship9.png";
+playerImage10.src = "./images/spaceship10.png";
 alienImage.src = "./images/alon.png"; // Provide the correct path to your image
 
 alienImage.onload = function () {
   renderGame(); // Call renderGame after the image has loaded
 };
 
-playerImage.onload = function () {
+playerImage1.onload = function () {
   renderGame(); // Call renderGame after the image has loaded
 };
 
@@ -49,7 +67,42 @@ function renderPlayers() {
     const playerSize = canvas.width * PLAYER_SIZE; // 5% of canvas width
     const x = player.x * canvas.width - playerSize / 2;
     const y = player.y * canvas.height - playerSize / 2;
-    ctx.drawImage(playerImage, x, y, playerSize, playerSize);
+    switch (player.color) {
+      case "#39FF14":
+        ctx.drawImage(playerImage1, x, y, playerSize, playerSize);
+        break;
+      case "#FF073A":
+        ctx.drawImage(playerImage2, x, y, playerSize, playerSize);
+        break;
+      case "#FFD300":
+        ctx.drawImage(playerImage3, x, y, playerSize, playerSize);
+        break;
+      case "#00FFFF":
+        ctx.drawImage(playerImage4, x, y, playerSize, playerSize);
+        break;
+      case "#FF00FF":
+        ctx.drawImage(playerImage5, x, y, playerSize, playerSize);
+        break;
+      case "#1B03A3":
+        ctx.drawImage(playerImage6, x, y, playerSize, playerSize);
+        break;
+      case "#FE59C2":
+        ctx.drawImage(playerImage7, x, y, playerSize, playerSize);
+        break;
+      case "#BDFCC9":
+        ctx.drawImage(playerImage8, x, y, playerSize, playerSize);
+        break;
+      case "#6E0DD0":
+        ctx.drawImage(playerImage9, x, y, playerSize, playerSize);
+        break;
+      case "#D0FA1B":
+        ctx.drawImage(playerImage10, x, y, playerSize, playerSize);
+        break;
+      default:
+        ctx.drawImage(playerImage1, x, y, playerSize, playerSize);
+        break;
+    }
+
 
     // Display username above the player
     ctx.fillStyle = "white";

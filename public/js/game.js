@@ -1,9 +1,20 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const socket = io.connect("https://best-game-in-the-world.onrender.com");
+const socket = io.connect("http://localhost:3000");
 
-// http://localhost:3000
-// https://best-game-in-the-world.onrender.com
+// Load the alien image
+const alienImage = new Image();
+const playerImage = new Image();
+playerImage.src = './images/spaceship.png';
+alienImage.src = './images/alon.png'; // Provide the correct path to your image
+
+alienImage.onload = function() {
+  renderGame(); // Call renderGame after the image has loaded
+};
+
+playerImage.onload = function() {
+  renderGame(); // Call renderGame after the image has loaded
+};
 
 let gameState = {};
 const PLAYER_SIZE = 0.05;
@@ -30,12 +41,9 @@ function renderPlayers() {
     const player = gameState.players[playerId];
     ctx.fillStyle = player.color;
     const playerSize = canvas.width * PLAYER_SIZE; // 5% of canvas width
-    ctx.fillRect(
-      player.x * canvas.width - playerSize / 2,
-      player.y * canvas.height - playerSize / 2,
-      playerSize,
-      playerSize
-    );
+    const x = player.x * canvas.width - playerSize / 2;
+    const y = player.y * canvas.height - playerSize / 2;
+    ctx.drawImage(playerImage, x, y, playerSize, playerSize);
 
     // Display username above the player
     ctx.fillStyle = "white";
@@ -64,15 +72,17 @@ function renderBullets() {
 }
 
 function renderAliens() {
+  if (!alienImage.complete) {
+    return; // Wait until the image is fully loaded
+  }
+  
   for (let alien of gameState.aliens) {
-    ctx.fillStyle = "green";
     const alienSize = canvas.width * 0.05; // 5% of canvas width
-    ctx.fillRect(
-      alien.x * canvas.width - alienSize / 2,
-      alien.y * canvas.height - alienSize / 2,
-      alienSize,
-      alienSize
-    );
+    const x = alien.x * canvas.width - alienSize / 2;
+    const y = alien.y * canvas.height - alienSize / 2;
+    
+    // Draw the image
+    ctx.drawImage(alienImage, x, y, alienSize, alienSize);
   }
 }
 

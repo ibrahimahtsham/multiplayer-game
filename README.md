@@ -1,2 +1,3 @@
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/weiji14/deepbedmap/)
+[![Static Badge](https://img.shields.io/badge/Render-Live%20Demo-red?style=for-the-badge&logo=render)](https://best-game-in-the-world.onrender.com/)
+
 

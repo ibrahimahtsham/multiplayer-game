@@ -106,7 +106,7 @@ function renderPlayers() {
 
     // Display username above the player
     ctx.fillStyle = "white";
-    ctx.font = "12px Arial";
+    ctx.font = "12px Bungee Spice";
     ctx.fillText(
       player.username,
       player.x * canvas.width - playerSize / 2,

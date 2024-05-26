@@ -9,12 +9,9 @@
       href="https://fonts.googleapis.com/css2?family=Comic+Neue&display=swap"
       rel="stylesheet"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Honk&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Honk&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
@@ -193,6 +190,14 @@
       .star-field .layer:nth-child(3) {
         animation: sf-fly-by-3 5s linear infinite;
       }
+      .orbitron-uniquifier {
+        font-family: "Orbitron", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        color: white;
+      }
+
     </style>
   </head>
   <body class="bg">
@@ -204,7 +209,7 @@
     <div id="scoreDisplay"></div>
     <button id="fullscreenButton">Fullscreen</button>
     <h2 class="honk-uniquifier">Alien Invaders Multiplayer</h2>
-    <p style="color: white">
+    <p class="orbitron-uniquifier">
       Use arrow keys to move your spaceship and press space to shoot!
     </p>
     <canvas id="gameCanvas"></canvas>

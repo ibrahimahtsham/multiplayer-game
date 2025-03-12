@@ -6,26 +6,27 @@
 
 ## Overview
 
-Multiplayer Game is a custom-coded real-time game that demonstrates dynamic canvas rendering with unique color-coded players. Each player is assigned a neon color from a predefined set, providing a visually engaging gameplay experience.
+Multiplayer Game is a custom-coded real-time game built using HTML, JavaScript, and CSS. It leverages WebSocket-based sockets for real-time communication between players, ensuring smooth multiplayer gameplay. The game is deployed on Render for a live experience.
 
 ## Features
 
-- **Real-time multiplayer gameplay:** Interact with other players as you compete or collaborate.
-- **Neon color customization:** Each player is tinted with a unique neon color.
-- **Optimized rendering:** Uses canvas techniques to apply tints efficiently.
-- **Live demo:** Experience the game in action on [Render](https://best-game-in-the-world.onrender.com/).
+- **Real-time multiplayer gameplay:** Connect and interact with other players via sockets.
+- **Neon color customization:** Each player is tinted with a unique neon color from a predefined set.
+- **Optimized canvas rendering:** Efficiently applies color tints to player images while preserving transparency.
+- **Built with web technologies:** Developed using HTML, JavaScript, and CSS.
+- **Live deployment on Render:** Experience the game live on Render.
 
 ## Project Structure
 
 ```
 multiplayer-game/
-├── index.html
-├── styles.css
-├── main.js
+├── index.html       // HTML for the game layout
+├── styles.css       // CSS for styling the game
+├── main.js          // JavaScript for game logic and socket communication
 ├── assets/
 │   ├── playerImage.png
 │   └── ... other assets ...
-└── README.md  <-- This file
+└── README.md        // This file
 ```
 
 ## Installation
